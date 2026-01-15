@@ -1,0 +1,17 @@
+# dependencies
+node_modules
+
+# Next.js build output
+.next
+out
+dist
+
+# Prisma generated files
+prisma/migrations
+
+# coverage
+coverage
+
+# OS / editor files
+.DS_Store
+.vscode
