@@ -9,7 +9,11 @@
     "format": "prettier --write .",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"No tests implemented.\"",
+    "test": "echo \"No tests yet\" && exit 0",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:prod": "prisma migrate deploy",
+    "db:migrate:test": "dotenv -e .env.test -- prisma migrate deploy",
+    "postinstall": "prisma generate",
     "prepare": "husky"
   },
   "packageManager": "pnpm@10.28.0",
