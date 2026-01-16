@@ -77,12 +77,18 @@ formatting for staged files:
 
 See `.husky/pre-commit` and `.lintstagedrc` for details.
 
+Commit messages are validated by Commitlint via the Husky `commit-msg` hook:
+
+- Config: `commitlint.config.mjs`
+- Hook: `.husky/commit-msg`
+
 ## CI
 
 GitHub Actions runs on pull requests and merges to `main`:
 
 - Install dependencies with pnpm
 - Lint and typecheck
+- Launch a PostgreSQL service for tests and migrations
 - Run tests
 - Build the application
 
