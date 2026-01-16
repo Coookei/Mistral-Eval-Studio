@@ -19,8 +19,9 @@
 npm-debug.log*
 .pnpm-debug.log*
 
-# env file
+# env files
 .env
+.env.test
 
 # vercel
 .vercel
@@ -31,3 +32,6 @@ next-env.d.ts
 
 # editor files
 /.vscode
+
+# prisma generated files
+/src/lib/generated/prisma
