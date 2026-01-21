@@ -4,6 +4,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { lastLoginMethod } from 'better-auth/plugins';
 import { after } from 'next/server';
 import { sendEmail } from './email';
+import { passwordSchema } from './validators';
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -11,6 +12,20 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    resetPasswordTokenExpiresIn: 60 * 60 * 24, // token in email/database expires after 24 hours
+    async sendResetPassword({ user, url }) {
+      // after extends lifetime on serverless platforms so emails can still get sent
+      after(async () => {
+        // schedule email sending after the response to reduce timing differences
+        // and timing based attacks, and keep auth fast
+        const { error } = await sendEmail({
+          to: user.email,
+          subject: 'Reset your password',
+          text: `Please reset your password by clicking the following link: ${url}. This link will expire after 24 hours.`,
+        });
+        if (error) console.error('Error sending password reset email:', error);
+      });
+    },
   },
   emailVerification: {
     sendOnSignUp: true,
