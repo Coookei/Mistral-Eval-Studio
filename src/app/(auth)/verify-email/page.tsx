@@ -1,17 +1,14 @@
+import { requireUser } from '@/lib/requireAuth';
 import type { Metadata } from 'next';
-import VerifyEmailComponent from './VerifyEmailComponent';
-import { getServerSession } from '@/lib/getSession';
 import { redirect } from 'next/navigation';
+import VerifyEmailComponent from './VerifyEmailComponent';
 
 export const metadata: Metadata = {
   title: 'Verify email',
 };
 
 const VerifyEmailPage = async () => {
-  const session = await getServerSession();
-  const user = session?.user;
-
-  if (!user) redirect('/sign-in');
+  const { user } = await requireUser();
 
   if (user.emailVerified) redirect('/dashboard');
 

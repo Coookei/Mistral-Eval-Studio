@@ -27,7 +27,7 @@ import { signInSchema, SignInValues } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Github, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useSyncExternalStore } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -35,7 +35,11 @@ import { toast } from 'sonner';
 export function SignInForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const redirect = decodeURIComponent(searchParams.get('redirect') || '');
 
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -62,7 +66,7 @@ export function SignInForm() {
       setError(error.message || 'Something went wrong');
     } else {
       toast.success('Signed in successfully');
-      router.push('/dashboard');
+      router.push(redirect ?? '/dashboard');
     }
   }
 
@@ -72,7 +76,7 @@ export function SignInForm() {
 
     const { error } = await authClient.signIn.social({
       provider,
-      callbackURL: '/dashboard', // after oauth sign in redirect
+      callbackURL: redirect ?? '/dashboard', // after oauth sign in redirect
     });
 
     setLoading(false);

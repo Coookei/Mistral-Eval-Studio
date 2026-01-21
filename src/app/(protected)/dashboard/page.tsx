@@ -1,18 +1,14 @@
 import UserButton from '@/components/auth/UserButton';
 import { EmailVerificationBanner } from '@/components/layout/EmailVerificationBanner';
-import { getServerSession } from '@/lib/getSession';
+import { requireUser } from '@/lib/requireAuth';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
 };
 
 const DashboardPage = async () => {
-  const session = await getServerSession();
-  const user = session?.user;
-
-  if (!user) redirect('/sign-in');
+  const { user } = await requireUser();
 
   return (
     <section className="flex min-h-svh items-center justify-center px-4">

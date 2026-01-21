@@ -1,7 +1,6 @@
 import UserButton from '@/components/auth/UserButton';
-import { getServerSession } from '@/lib/getSession';
+import { requireAdmin } from '@/lib/requireAuth';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import { ListUsers } from './ListUsers';
 
 export const metadata: Metadata = {
@@ -9,12 +8,7 @@ export const metadata: Metadata = {
 };
 
 const AdminPage = async () => {
-  const session = await getServerSession();
-  const user = session?.user;
-
-  if (!user) redirect('/sign-in');
-
-  if (user.role !== 'admin') redirect('/dashboard');
+  const { user } = await requireAdmin();
 
   return (
     <section className="flex min-h-svh items-center justify-center px-4">

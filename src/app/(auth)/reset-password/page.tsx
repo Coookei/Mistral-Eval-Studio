@@ -1,7 +1,6 @@
-import { getServerSession } from '@/lib/getSession';
+import { requireNotAuthenticated } from '@/lib/requireAuth';
 import { TriangleAlertIcon } from 'lucide-react';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
 export const metadata: Metadata = {
@@ -13,12 +12,9 @@ interface Props {
 }
 
 const ResetPasswordPage = async ({ searchParams }: Props) => {
+  await requireNotAuthenticated();
+
   const { token } = await searchParams;
-
-  const session = await getServerSession();
-  const user = session?.user;
-
-  if (user) redirect('/dashboard');
 
   return (
     <section className="flex min-h-svh items-center justify-center px-4">
