@@ -89,7 +89,7 @@ export const auth = betterAuth({
       }
     }),
   },
-  plugins: [lastLoginMethod()],
+  plugins: [lastLoginMethod({ storeInDatabase: true })],
 });
 
 export type Session = typeof auth.$Infer.Session;
