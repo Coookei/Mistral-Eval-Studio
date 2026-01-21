@@ -54,6 +54,18 @@ export const auth = betterAuth({
       },
     },
   },
+  socialProviders: {
+    google: {
+      prompt: 'select_account', // to always ask user to select which account
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+    github: {
+      prompt: 'select_account',
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    },
+  },
   session: {
     expiresIn: 60 * 60 * 24 * 14, // users session lasts 14 days
   },
