@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { lastLoginMethod } from 'better-auth/plugins';
 import { after } from 'next/server';
 import { sendEmail } from './email';
@@ -68,6 +69,25 @@ export const auth = betterAuth({
   },
   session: {
     expiresIn: 60 * 60 * 24 * 14, // users session lasts 14 days
+  },
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (
+        ctx.path === '/sign-up/email' ||
+        ctx.path === '/reset-password' ||
+        ctx.path === '/change-password'
+      ) {
+        // apply password validation logic on the server-side to the
+        // sign up, reset password, and change password pages.
+        const password = ctx.body.password || ctx.body.newPassword;
+        const validation = passwordSchema.safeParse(password);
+        if (!validation.success) {
+          throw new APIError('BAD_REQUEST', {
+            message: 'Password does not meet strength requirements',
+          });
+        }
+      }
+    }),
   },
   plugins: [lastLoginMethod()],
 });
