@@ -1,4 +1,5 @@
 import type { User } from '@/lib/auth';
+import { EmailSettingsCard } from './EmailSettingsCard';
 import { ProfileSettingsCard } from './ProfileSettingsCard';
 
 type AccountPageComponentProps = {
@@ -13,6 +14,7 @@ const AccountPageComponent = ({ user }: AccountPageComponentProps) => {
         <p className="text-muted-foreground mt-1">Manage your account settings and profile</p>
       </div>
       <ProfileSettingsCard defaultName={user.name} defaultImageUrl={user.image ?? null} />
+      <EmailSettingsCard currentEmail={user.email} />
     </div>
   );
 };

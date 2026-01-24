@@ -47,6 +47,19 @@ export const auth = betterAuth({
     },
   },
   user: {
+    changeEmail: {
+      enabled: true,
+      async sendChangeEmailConfirmation({ user, newEmail, url }) {
+        // authed action so no need for after here.
+        // note: the jwt token in email also expires after 24 hours as above
+        const { error } = await sendEmail({
+          to: user.email, // send to CURRENT email to confirm change
+          subject: 'Approve your email change',
+          text: `You have requested to change your account email to ${newEmail}. To start this change, please click the following link: ${url}. An email will then be sent to ${newEmail} which you must approve to complete the change. This link will expire after 24 hours.`,
+        });
+        if (error) console.error('Error sending email change confirmation email:', error);
+      },
+    },
     additionalFields: {
       role: {
         type: 'string',

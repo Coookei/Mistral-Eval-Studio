@@ -53,5 +53,10 @@ export const profileSchema = z.object({
   image: profileImageSchema,
 });
 
+export const changeEmailSchema = z.object({
+  email: z.email({ message: 'Please enter a valid email' }),
+});
+
 export type ImageUrlValues = z.infer<typeof imageUrlSchema>;
 export type ProfileValues = z.infer<typeof profileSchema>;
+export type ChangeEmailValues = z.infer<typeof changeEmailSchema>;
