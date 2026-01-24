@@ -1,4 +1,5 @@
 import { User } from '@/lib/auth';
+import { initials } from '@/lib/utils';
 import {
   LayoutDashboard as DashboardIcon,
   SettingsIcon,
@@ -17,14 +18,6 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 
-function initials(input: string) {
-  return input
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .substring(0, 2);
-}
 export type UserDropdownProps = {
   onSignOut: () => void;
   user: User;
@@ -66,10 +59,10 @@ export default function UserDropdown({ onSignOut, user }: UserDropdownProps) {
               </DropdownMenuItem>
             </Link>
           )}
-          <Link href="/profile">
+          <Link href="/account">
             <DropdownMenuItem className="cursor-pointer">
               <UserIcon className="mr-2 h-4 w-4" />
-              My Profile
+              My Account
             </DropdownMenuItem>
           </Link>
           <Link href="/settings">
