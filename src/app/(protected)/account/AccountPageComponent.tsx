@@ -1,5 +1,6 @@
 import type { User } from '@/lib/auth';
 import { EmailSettingsCard } from './EmailSettingsCard';
+import { PasswordSettingsCard } from './PasswordSettingsCard';
 import { ProfileSettingsCard } from './ProfileSettingsCard';
 
 type AccountPageComponentProps = {
@@ -15,6 +16,7 @@ const AccountPageComponent = ({ user }: AccountPageComponentProps) => {
       </div>
       <ProfileSettingsCard defaultName={user.name} defaultImageUrl={user.image ?? null} />
       <EmailSettingsCard currentEmail={user.email} />
+      <PasswordSettingsCard />
     </div>
   );
 };
