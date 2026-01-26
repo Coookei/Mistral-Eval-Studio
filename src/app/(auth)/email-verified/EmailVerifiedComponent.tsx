@@ -77,7 +77,7 @@ export default function EmailVerifiedComponent({
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
-                Redirecting automatically in {countdown} seconds...
+                Redirecting automatically in {countdown} second{countdown !== 1 ? 's' : ''}...
               </p>
             </>
           )}

@@ -88,7 +88,7 @@ export function ResetPasswordForm({ token }: Props) {
               <Link href="/sign-in">Sign in with new password</Link>
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              Redirecting to sign in in {countdown} seconds...
+              Redirecting to sign in in {countdown} second{countdown !== 1 ? 's' : ''}...
             </p>
           </CardContent>
         </Card>
