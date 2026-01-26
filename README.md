@@ -141,6 +141,32 @@ GitHub Actions runs on pull requests and merges to `main`:
 
 See `.github/workflows/ci.yml` for the CI pipeline.
 
+## Authentication & Authorisation
+
+The app uses Better Auth for authentication and authorisation:
+
+- Email and password authentication, plus Google and GitHub OAuth
+- Email verification on sign-up
+- Forgotten password and password reset flow
+- Support for OAuth-only users to set an initial password via a reset flow
+- Server-side password strength validation on sign-up, reset, and change flows
+- Role field on users to support role-based authorisation
+
+### Account management
+
+Authenticated users have access to an account page where they can:
+
+- Update their name and profile picture (image upload or URL)
+- Change their email address with a secure email verification flow that confirms via current email before then verifying with the new one
+- Update their password
+- View, link, and unlink connected OAuth providers
+- View active sessions and revoke sessions across devices
+
+### Usability features
+
+- Redirect users back to their originally requested page after login
+- Display the last used login method on the sign-in page
+
 ## Adding a new shadcn/ui component
 
 1. Find the component name in the [shadcn/ui docs](https://ui.shadcn.com/docs/components).
