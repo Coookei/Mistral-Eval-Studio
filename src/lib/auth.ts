@@ -68,6 +68,11 @@ export const auth = betterAuth({
       },
     },
   },
+  account: {
+    accountLinking: {
+      allowDifferentEmails: false, // all oauth accounts must match main email
+    },
+  },
   socialProviders: {
     google: {
       prompt: 'select_account', // to always ask user to select which account

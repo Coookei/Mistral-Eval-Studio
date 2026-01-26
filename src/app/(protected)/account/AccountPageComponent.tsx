@@ -3,6 +3,7 @@ import { EmailSettingsCard } from './EmailSettingsCard';
 import { PasswordSettingsCard } from './PasswordSettingsCard';
 import { ProfileSettingsCard } from './ProfileSettingsCard';
 import { SecuritySettingsCard } from './SecuritySettingsCard';
+import { LinkedAccountsCard } from './LinkedAccountsCard';
 
 type AccountPageComponentProps = {
   user: Pick<User, 'name' | 'email' | 'image' | 'createdAt'>; // only include the fields we need
@@ -18,6 +19,7 @@ const AccountPageComponent = ({ user }: AccountPageComponentProps) => {
       <ProfileSettingsCard defaultName={user.name} defaultImageUrl={user.image ?? null} />
       <EmailSettingsCard currentEmail={user.email} />
       <PasswordSettingsCard />
+      <LinkedAccountsCard />
       <SecuritySettingsCard createdAt={user.createdAt} />
     </div>
   );
