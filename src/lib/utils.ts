@@ -14,6 +14,20 @@ export function initials(input: string) {
     .substring(0, 2);
 }
 
+export const formatDateTime = (value?: string | Date | null) => {
+  if (!value) return 'Unknown';
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Unknown';
+  return date.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+};
+
 export function getRelativeTime(date: Date | null | undefined): string {
   if (!date) return 'Unknown';
   const now = new Date();
