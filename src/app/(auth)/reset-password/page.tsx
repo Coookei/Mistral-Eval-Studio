@@ -1,4 +1,3 @@
-import { requireNotAuthenticated } from '@/lib/requireAuth';
 import { TriangleAlertIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ResetPasswordForm } from './ResetPasswordForm';
@@ -12,8 +11,6 @@ interface Props {
 }
 
 const ResetPasswordPage = async ({ searchParams }: Props) => {
-  await requireNotAuthenticated();
-
   const { token } = await searchParams;
 
   return (

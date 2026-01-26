@@ -1,4 +1,3 @@
-import { requireNotAuthenticated } from '@/lib/requireAuth';
 import type { Metadata } from 'next';
 import ForgotPasswordForm from './ForgotPasswordForm';
 
@@ -7,8 +6,6 @@ export const metadata: Metadata = {
 };
 
 const ForgotPasswordPage = async () => {
-  await requireNotAuthenticated();
-
   return (
     <section className="flex min-h-svh items-center justify-center px-4">
       <ForgotPasswordForm />
