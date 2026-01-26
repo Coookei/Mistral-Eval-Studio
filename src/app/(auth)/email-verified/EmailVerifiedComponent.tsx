@@ -1,17 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2, TriangleAlertIcon } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { use, useEffect, useState } from 'react';
 
-export default function EmailVerifiedComponent() {
-  const searchParams = useSearchParams();
+export default function EmailVerifiedComponent({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const [countdown, setCountdown] = useState(30);
+  const { error } = use(searchParams);
 
-  const error = searchParams.get('error');
   const isInvalidToken = Boolean(error);
 
   useEffect(() => {
