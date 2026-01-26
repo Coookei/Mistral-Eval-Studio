@@ -17,11 +17,10 @@ export function ListUsers() {
         const users = await listUsers();
         if (users) {
           setUsers(users);
+          toast.success('Users listed successfully');
         } else {
           toast.error('No users found');
         }
-
-        toast.success('Users listed successfully');
       } catch (error) {
         console.error(error);
         toast.error('Something went wrong');
