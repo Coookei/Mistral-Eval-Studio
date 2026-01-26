@@ -162,7 +162,7 @@ export function SignUpForm() {
                   <FormControl>
                     <PasswordInput
                       autoComplete="new-password"
-                      placeholder="Confirm password"
+                      placeholder="Enter password"
                       {...field}
                       disabled={loading}
                     />
