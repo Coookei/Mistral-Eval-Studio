@@ -26,6 +26,7 @@ jobs:
           --health-retries=5
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=public
+      BETTER_AUTH_SECRET: ci-secret
 
     steps:
       - name: Checkout
