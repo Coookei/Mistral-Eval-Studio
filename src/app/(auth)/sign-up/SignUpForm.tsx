@@ -234,6 +234,17 @@ export function SignUpForm() {
                 {lastMethod === 'github' && <Badge className="ml-1 bg-green-700">Last used</Badge>}
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground text-center">
+              By creating an account, you agree to our{' '}
+              <Link href="/privacy" className="underline hover:opacity-80">
+                Privacy Policy
+              </Link>{' '}
+              and{' '}
+              <Link href="/terms" className="underline hover:opacity-80">
+                Terms
+              </Link>
+              .
+            </p>
           </form>
         </Form>
       </CardContent>
