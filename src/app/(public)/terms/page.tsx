@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 
-export default async function TermsPage() {
+export default function TermsPage() {
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
       <Card className="p-8 space-y-6">
