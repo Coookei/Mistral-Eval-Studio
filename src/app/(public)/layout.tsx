@@ -1,4 +1,6 @@
 import { PublicHeader } from '@/components/layout/PublicHeader';
+import { PublicFooter } from '@/components/layout/PublicFooter';
+
 export default function PublicLayout({
   children,
 }: Readonly<{
@@ -6,8 +8,9 @@ export default function PublicLayout({
 }>) {
   return (
     <>
-      <main className="min-h-screen">{children}</main>
       <PublicHeader />
+      <main className="min-h-screen">{children}</main>
+      <PublicFooter />
     </>
   );
 }
