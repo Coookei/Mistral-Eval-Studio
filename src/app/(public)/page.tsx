@@ -1,3 +1,3 @@
-export default async function Home() {
-  return <>Hello World. Bienvenue!</>;
+export default async function LandingPage() {
+  return <>Landing page</>;
 }
