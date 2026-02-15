@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Mistral Eval Studio',
-  description: 'Compare and evaluate Mistral models.',
+  description:
+    'Side-by-side Mistral LLM evaluation studio for comparing prompts, model configurations, and outputs.',
 };
 
 export default function RootLayout({
