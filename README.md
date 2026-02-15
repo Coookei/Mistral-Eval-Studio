@@ -1,6 +1,6 @@
 # Mistral Eval Studio
 
-WIP
+WIP: Side-by-side Mistral LLM evaluation studio for comparing prompts, model configurations, and outputs.
 
 ## Tech Stack
 
