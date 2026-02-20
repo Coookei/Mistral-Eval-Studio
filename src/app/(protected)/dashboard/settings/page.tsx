@@ -2,15 +2,15 @@ import { requireUser } from '@/lib/requireAuth';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
+  title: 'Settings',
 };
 
-const DashboardPage = async () => {
+const DashboardSettingsPage = async () => {
   const { user } = await requireUser();
 
   return (
     <section className="space-y-3">
-      <h1 className="text-2xl">Welcome</h1>
+      <h1 className="text-2xl">Settings</h1>
       <p>
         Hello, {user.name}. Your role is {user.role ?? 'none'}.
       </p>
@@ -18,4 +18,4 @@ const DashboardPage = async () => {
   );
 };
 
-export default DashboardPage;
+export default DashboardSettingsPage;
