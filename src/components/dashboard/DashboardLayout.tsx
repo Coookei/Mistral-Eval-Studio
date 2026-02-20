@@ -2,7 +2,7 @@
 
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Topbar } from '@/components/dashboard/Topbar';
-import { VerifyBanner } from '@/components/dashboard/VerifiyBanner';
+import { VerifyBanner } from '@/components/dashboard/VerifyBanner';
 import {
   Sheet,
   SheetContent,
