@@ -6,7 +6,10 @@ export function HowItWorks() {
         <div className="space-y-4 md:space-y-6">
           {steps.map((item) => (
             <div key={item.step} className="flex gap-4">
-              <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-foreground text-background flex items-center justify-center font-semibold text-sm sm:text-base">
+              <div
+                className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-foreground text-background flex items-center justify-center font-semibold text-sm sm:text-base"
+                aria-label={`Step ${item.step}`}
+              >
                 {item.step}
               </div>
               <div className="pt-0.5 sm:pt-1">

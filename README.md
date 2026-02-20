@@ -1,6 +1,31 @@
 # Mistral Eval Studio
 
-WIP: Side-by-side Mistral LLM evaluation studio for comparing prompts, model configurations, and outputs.
+Work in progress: Side-by-side Mistral LLM evaluation studio for comparing prompts, model configurations, and outputs.
+
+## Page Overview
+
+### Public website pages
+
+- `/` - Landing page
+- `/docs` - Documentation page
+- `/privacy` - Privacy policy
+- `/terms` - Terms of service
+
+### Public auth pages
+
+- `/sign-in` - Sign-in page
+- `/sign-up` - Sign-up page
+- `/verify-email` - Verify email flow
+- `/email-verified` - Email verification result page
+- `/forgot-password` - Request a password reset email
+- `/reset-password?token=` - Set a new password with reset token
+
+### Protected pages
+
+- `/dashboard` - Dashboard home
+- `/dashboard/settings` - Dashboard settings
+- `/account` - Account profile, security, sessions, and linked providers
+- `/admin` - Admin page (admin access only)
 
 ## Tech Stack
 

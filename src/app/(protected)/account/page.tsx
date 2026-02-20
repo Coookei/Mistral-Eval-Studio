@@ -10,7 +10,7 @@ const AccountPage = async () => {
   const { user } = await requireUser();
 
   return (
-    <section className="flex min-h-svh items-center justify-center px-4 py-8">
+    <section>
       <AccountPageComponent user={user} />
     </section>
   );

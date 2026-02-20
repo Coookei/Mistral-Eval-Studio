@@ -1,4 +1,3 @@
-import UserButton from '@/components/auth/UserButton';
 import { requireAdmin } from '@/lib/requireAuth';
 import type { Metadata } from 'next';
 import { ListUsers } from './ListUsers';
@@ -11,9 +10,11 @@ const AdminPage = async () => {
   const { user } = await requireAdmin();
 
   return (
-    <section className="flex min-h-svh items-center justify-center px-4">
-      Welcome to the Admin Page {user.name}. Your role is indeed {user.role ?? 'none'}.
-      <UserButton />
+    <section className="space-y-3">
+      <h1 className="text-2xl">Welcome to the Admin page</h1>
+      <p>
+        Hello, {user.name}. Your role is {user.role ?? 'none'}.
+      </p>
       <ListUsers />
     </section>
   );
