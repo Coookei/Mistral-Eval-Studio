@@ -45,9 +45,8 @@ function Logo({ onNavClick }: SidebarProps) {
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'New comparison', href: '/dashboard/comparison', icon: Plus },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
-  // TODO add page links here for the software
-  { name: 'New comparison', href: '/dashboard/compare/new', icon: Plus },
 ];
 
 function Links({ pathname, onNavClick }: { pathname: string; onNavClick?: () => void }) {
@@ -86,7 +85,7 @@ function Bottom({ onNavClick }: SidebarProps) {
       </Link>
 
       <div className="flex items-center gap-2 px-3 py-2 text-xs text-sidebar-foreground/65">
-        {/* TODO wire up to API health check */}
+        {/* TODO wire up this status to API health check */}
         <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
         Service Status: Online
       </div>
