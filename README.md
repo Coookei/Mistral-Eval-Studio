@@ -166,6 +166,19 @@ GitHub Actions runs on pull requests and merges to `main`:
 
 See `.github/workflows/ci.yml` for the CI pipeline.
 
+## Development Workflow
+
+This is the development approach followed whilst building this software:
+
+1. Create a new branch from `main` for each feature or fix, as main is protected.
+2. Implement the changes and commit locally.
+3. Push the branch and open a pull request.
+4. CI runs automatically on pull request updates.
+5. GitHub Copilot reviews the pull request and provides a summary.
+6. Resolve review feedback and push follow-up commits as needed.
+7. Merge the pull request into `main` once checks pass and feedback is addressed.
+8. CI runs again on `main` after merge to confirm final build.
+
 ## Authentication & Authorisation
 
 The app uses Better Auth for authentication and authorisation:
