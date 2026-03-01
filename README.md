@@ -2,6 +2,16 @@
 
 Work in progress: Side-by-side Mistral LLM evaluation studio for comparing prompts, model configurations, and outputs.
 
+## Tech Stack
+
+- Next.js, React, and TypeScript
+- shadcn/ui with Tailwind CSS for styling
+- Prisma ORM with PostgreSQL for data persistence
+- Mistral AI for large language model inference
+- Better Auth for authentication
+- Resend for transactional email delivery
+- pnpm for package management
+
 ## Page Overview
 
 ### Public website pages
@@ -23,18 +33,10 @@ Work in progress: Side-by-side Mistral LLM evaluation studio for comparing promp
 ### Protected pages
 
 - `/dashboard` - Dashboard home
+- `/dashboard/comparison` - Side-by-side model comparison
 - `/dashboard/settings` - Dashboard settings
 - `/account` - Account profile, security, sessions, and linked providers
 - `/admin` - Admin page (admin access only)
-
-## Tech Stack
-
-- Next.js, React, and TypeScript
-- shadcn/ui with Tailwind CSS for styling
-- Prisma ORM with PostgreSQL for data persistence
-- Better Auth for authentication
-- Resend for transactional email delivery
-- pnpm for package management
 
 ## Getting Started
 
@@ -46,6 +48,7 @@ Follow these steps to set up the project
 - pnpm 10 (see `packageManager` in `package.json`)
 - PostgreSQL database
 - Google and GitHub OAuth applications
+- Mistral AI API key
 - Resend API key
 
 ### 1. Clone the repository
@@ -204,6 +207,12 @@ Authenticated users have access to an account page where they can:
 
 - Redirect users back to their originally requested page after login
 - Display the last used login method on the sign-in page
+
+## API Routes
+
+Routes require authentication.
+
+- `POST /api/llm/complete` - Runs a single LLM chat completion.
 
 ## Adding a new shadcn/ui component
 
