@@ -1,6 +1,10 @@
 import z from 'zod';
 
-export const MODELS = ['mistral-small', 'mistral-medium', 'mistral-large'] as const;
+export const MODELS = [
+  'mistral-small-latest',
+  'mistral-medium-latest',
+  'mistral-large-latest',
+] as const;
 export type Model = (typeof MODELS)[number];
 
 const samplingConfigSchema = z.object({
