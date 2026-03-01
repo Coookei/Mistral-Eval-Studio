@@ -19,6 +19,7 @@
   "packageManager": "pnpm@10.29.3",
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@mistralai/mistralai": "^1.14.0",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.15",
