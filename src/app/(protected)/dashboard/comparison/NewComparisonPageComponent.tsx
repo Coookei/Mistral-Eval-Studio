@@ -88,47 +88,51 @@ export default function NewComparisonPageComponent() {
     finishReason: '',
   });
 
-  // isRunning is true for the duration of handleRunComparison
-  const isRunning = form.formState.isSubmitting;
+  // dont use form.formState.isSubmitting loading state as handleRunComparison fires without awaiting
+  const [loadingA, setLoadingA] = useState(false);
+  const [loadingB, setLoadingB] = useState(false);
+  const isRunning = loadingA || loadingB;
 
-  const handleRunComparison = async (values: ComparisonRunValues) => {
+  const handleRunComparison = (values: ComparisonRunValues) => {
     setErrorA(null);
     setErrorB(null);
-
-    const [settledA, settledB] = await Promise.allSettled([
-      api.post<CompletionResult>('/api/llm/complete', buildRequest(values, 'A')),
-      api.post<CompletionResult>('/api/llm/complete', buildRequest(values, 'B')),
-    ]);
-
-    if (settledA.status === 'fulfilled') {
-      setOutputA(settledA.value.text);
-      setMetricsA({
-        latency: settledA.value.latencyMs,
-        inputTokens: settledA.value.usage.promptTokens,
-        outputTokens: settledA.value.usage.completionTokens,
-        finishReason: settledA.value.finishReason,
-      });
-    } else {
-      setErrorA(
-        settledA.reason instanceof Error ? settledA.reason.message : 'An unexpected error occurred.'
-      );
-    }
-
-    if (settledB.status === 'fulfilled') {
-      setOutputB(settledB.value.text);
-      setMetricsB({
-        latency: settledB.value.latencyMs,
-        inputTokens: settledB.value.usage.promptTokens,
-        outputTokens: settledB.value.usage.completionTokens,
-        finishReason: settledB.value.finishReason,
-      });
-    } else {
-      setErrorB(
-        settledB.reason instanceof Error ? settledB.reason.message : 'An unexpected error occurred.'
-      );
-    }
-
+    setOutputA('');
+    setOutputB('');
     setHasRun(true);
+    setLoadingA(true);
+    setLoadingB(true);
+
+    api
+      .post<CompletionResult>('/api/llm/complete', buildRequest(values, 'A'))
+      .then((result) => {
+        setOutputA(result.text);
+        setMetricsA({
+          latency: result.latencyMs,
+          inputTokens: result.usage.promptTokens,
+          outputTokens: result.usage.completionTokens,
+          finishReason: result.finishReason,
+        });
+      })
+      .catch((err: unknown) => {
+        setErrorA(err instanceof Error ? err.message : 'An unexpected error occurred.');
+      })
+      .finally(() => setLoadingA(false));
+
+    api
+      .post<CompletionResult>('/api/llm/complete', buildRequest(values, 'B'))
+      .then((result) => {
+        setOutputB(result.text);
+        setMetricsB({
+          latency: result.latencyMs,
+          inputTokens: result.usage.promptTokens,
+          outputTokens: result.usage.completionTokens,
+          finishReason: result.finishReason,
+        });
+      })
+      .catch((err: unknown) => {
+        setErrorB(err instanceof Error ? err.message : 'An unexpected error occurred.');
+      })
+      .finally(() => setLoadingB(false));
   };
 
   const handleReset = () => {
@@ -201,7 +205,8 @@ export default function NewComparisonPageComponent() {
 
           {/* <ResultsCard> is outside the <form> to avoid html error of nested forms */}
           <ResultsCard
-            isRunning={isRunning}
+            loadingA={loadingA}
+            loadingB={loadingB}
             hasRun={hasRun}
             outputA={outputA}
             outputB={outputB}

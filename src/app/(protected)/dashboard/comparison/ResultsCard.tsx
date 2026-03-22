@@ -21,7 +21,8 @@ import { useForm } from 'react-hook-form';
 import { RunMetrics } from './NewComparisonPageComponent';
 
 type Props = {
-  isRunning: boolean;
+  loadingA: boolean;
+  loadingB: boolean;
   hasRun: boolean;
   outputA: string;
   outputB: string;
@@ -33,7 +34,8 @@ type Props = {
 };
 
 export function ResultsCard({
-  isRunning,
+  loadingA,
+  loadingB,
   hasRun,
   outputA,
   outputB,
@@ -72,7 +74,7 @@ export function ResultsCard({
             output={outputA}
             error={errorA}
             metrics={metricsA}
-            isRunning={isRunning}
+            isRunning={loadingA}
             hasRun={hasRun}
           />
           <OutputPanel
@@ -80,12 +82,12 @@ export function ResultsCard({
             output={outputB}
             error={errorB}
             metrics={metricsB}
-            isRunning={isRunning}
+            isRunning={loadingB}
             hasRun={hasRun}
           />
         </div>
 
-        {hasRun && !errorA && !errorB && (
+        {hasRun && !loadingA && !loadingB && !errorA && !errorB && (
           <>
             <Separator />
             <Form {...form}>

@@ -113,7 +113,7 @@ export function PromptAndInstructionsCard({ control }: Props) {
 
           <p className="text-sm text-muted-foreground">
             {
-              'It is recommended to include your token limit in the instructions to ensure the model does not get cut off mid response.'
+              'It is recommended to include your token limit in the instructions so the model can generate responses without getting cut off.'
             }
           </p>
 
