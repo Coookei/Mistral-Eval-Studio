@@ -4,8 +4,6 @@ import type { CompletionRequestBody } from '@/app/api/llm/complete/schema';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { api } from '@/lib/api';
-import type { CompletionResult } from '@/lib/llm/types';
 import { comparisonRunSchema, type ComparisonRunValues } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Loader2, Timer } from 'lucide-react';
@@ -15,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { ConfigurationCard } from './ConfigurationCard';
 import { PromptAndInstructionsCard } from './PromptAndInstructionsCard';
 import { ResultsCard } from './ResultsCard';
+import { streamCompletion } from './streamCompletion';
 
 export type RunMetrics = {
   latency: number;
@@ -125,33 +124,15 @@ export default function NewComparisonPageComponent() {
     setLoadingB(true);
     setElapsedMs(0);
 
-    api
-      .post<CompletionResult>('/api/llm/complete', buildRequest(values, 'A'))
-      .then((result) => {
-        setOutputA(result.text);
-        setMetricsA({
-          latency: result.latencyMs,
-          inputTokens: result.usage.promptTokens,
-          outputTokens: result.usage.completionTokens,
-          finishReason: result.finishReason,
-        });
-      })
+    streamCompletion(buildRequest(values, 'A'), (chunk) => setOutputA((prev) => prev + chunk))
+      .then((metrics) => setMetricsA(metrics))
       .catch((err: unknown) => {
         setErrorA(err instanceof Error ? err.message : 'An unexpected error occurred.');
       })
       .finally(() => setLoadingA(false));
 
-    api
-      .post<CompletionResult>('/api/llm/complete', buildRequest(values, 'B'))
-      .then((result) => {
-        setOutputB(result.text);
-        setMetricsB({
-          latency: result.latencyMs,
-          inputTokens: result.usage.promptTokens,
-          outputTokens: result.usage.completionTokens,
-          finishReason: result.finishReason,
-        });
-      })
+    streamCompletion(buildRequest(values, 'B'), (chunk) => setOutputB((prev) => prev + chunk))
+      .then((metrics) => setMetricsB(metrics))
       .catch((err: unknown) => {
         setErrorB(err instanceof Error ? err.message : 'An unexpected error occurred.');
       })

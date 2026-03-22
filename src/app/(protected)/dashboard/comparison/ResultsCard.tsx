@@ -191,24 +191,9 @@ function OutputPanel({
         <Badge variant="outline">{label}</Badge>
       </div>
       <div className="flex-1 p-4 rounded-md bg-muted text-sm leading-relaxed overflow-y-auto min-h-32">
-        {isRunning ? (
+        {isRunning && !output ? (
           <div className="space-y-3">
-            <Skeleton className="h-3 w-full bg-muted-foreground/20" />
-            <Skeleton className="h-3 w-11/12 bg-muted-foreground/20" />
-            <Skeleton className="h-3 w-4/5 bg-muted-foreground/20" />
-            <Skeleton className="h-3 w-full bg-muted-foreground/20" />
-            <Skeleton className="h-3 w-3/4 bg-muted-foreground/20" />
-            <div className="pt-2 space-y-3">
-              <Skeleton className="h-3 w-full bg-muted-foreground/20" />
-              <Skeleton className="h-3 w-5/6 bg-muted-foreground/20" />
-              <Skeleton className="h-3 w-full bg-muted-foreground/20" />
-            </div>
-            <div className="pt-2 space-y-3">
-              <Skeleton className="h-3 w-2/3 bg-muted-foreground/20" />
-              <Skeleton className="h-3 w-full bg-muted-foreground/20" />
-              <Skeleton className="h-3 w-4/5 bg-muted-foreground/20" />
-              <Skeleton className="h-3 w-11/12 bg-muted-foreground/20" />
-            </div>
+            <Skeleton className="h-3 w-2/5 bg-muted-foreground/20" />
           </div>
         ) : error ? (
           <p className="text-destructive">{error}</p>

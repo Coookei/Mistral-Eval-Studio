@@ -44,4 +44,51 @@ export const mistral = {
       rawId: result.id,
     };
   },
+
+  async stream(request: LlmRequest, onChunk: (text: string) => void): Promise<CompletionResult> {
+    const start = Date.now();
+
+    const eventStream = await getClient().chat.stream({
+      model: request.model,
+      messages: request.messages,
+      temperature: request.temperature,
+      topP: request.topP,
+      maxTokens: request.maxTokens,
+    });
+
+    let text = '';
+    let finishReason = 'unknown';
+    let promptTokens = 0;
+    let completionTokens = 0;
+    let totalTokens = 0;
+    let rawId = '';
+
+    for await (const event of eventStream) {
+      const chunk = event.data;
+      rawId = chunk.id;
+
+      const delta = chunk.choices[0]?.delta.content;
+      if (typeof delta === 'string' && delta) {
+        text += delta;
+        onChunk(delta); // this method is passed from the API streamingService, each delta is written as an JSON line to the HTTP stream to be read by browser
+      }
+
+      const chunkFinishReason = chunk.choices[0]?.finishReason;
+      if (chunkFinishReason) finishReason = chunkFinishReason;
+
+      if (chunk.usage) {
+        promptTokens = chunk.usage.promptTokens ?? 0;
+        completionTokens = chunk.usage.completionTokens ?? 0;
+        totalTokens = chunk.usage.totalTokens ?? 0;
+      }
+    }
+
+    return {
+      text,
+      latencyMs: Date.now() - start,
+      finishReason,
+      usage: { promptTokens, completionTokens, totalTokens },
+      rawId,
+    };
+  },
 };
