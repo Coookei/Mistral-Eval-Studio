@@ -8,9 +8,9 @@ import { api } from '@/lib/api';
 import type { CompletionResult } from '@/lib/llm/types';
 import { comparisonRunSchema, type ComparisonRunValues } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Timer } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfigurationCard } from './ConfigurationCard';
 import { PromptAndInstructionsCard } from './PromptAndInstructionsCard';
@@ -93,6 +93,28 @@ export default function NewComparisonPageComponent() {
   const [loadingB, setLoadingB] = useState(false);
   const isRunning = loadingA || loadingB;
 
+  // timer logic
+  const [elapsedMs, setElapsedMs] = useState<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isRunning && hasRun) {
+      startTimeRef.current = Date.now();
+      timerRef.current = setInterval(() => {
+        setElapsedMs(Date.now() - (startTimeRef.current ?? Date.now()));
+      }, 50);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isRunning, hasRun]);
+
   const handleRunComparison = (values: ComparisonRunValues) => {
     setErrorA(null);
     setErrorB(null);
@@ -101,6 +123,7 @@ export default function NewComparisonPageComponent() {
     setHasRun(true);
     setLoadingA(true);
     setLoadingB(true);
+    setElapsedMs(0);
 
     api
       .post<CompletionResult>('/api/llm/complete', buildRequest(values, 'A'))
@@ -142,11 +165,11 @@ export default function NewComparisonPageComponent() {
     setErrorB(null);
     setOutputA('');
     setOutputB('');
+    setElapsedMs(null);
   };
 
   const handlePostSaveEvaluation = () => {
     // this runs after the ResultsCard have completed saving the evaluation
-
     router.push('/dashboard/comparison/1'); // TODO replace with real id from backend after saving evaluation
   };
 
@@ -187,7 +210,15 @@ export default function NewComparisonPageComponent() {
 
             <ConfigurationCard control={form.control} />
 
-            <div className="flex justify-end">
+            <div className="flex items-center justify-end gap-3">
+              {elapsedMs && (
+                <span className="flex items-center gap-1.5 text-sm text-muted-foreground tabular-nums">
+                  <Timer className="h-3.5 w-3.5" />
+                  {isRunning
+                    ? `${(elapsedMs / 1000).toFixed(1)}s`
+                    : `Completed in ${(elapsedMs / 1000).toFixed(1)}s`}
+                </span>
+              )}
               <Button type="submit" disabled={!form.formState.isValid || isRunning}>
                 {isRunning ? (
                   <>
