@@ -26,7 +26,7 @@ export interface CompletionResult {
 // -- llm internal types used by provider implementations e.g. mistral --
 
 export interface LlmMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: 'system' | 'user';
   content: string;
 }
 
