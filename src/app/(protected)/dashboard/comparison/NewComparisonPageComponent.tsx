@@ -24,7 +24,7 @@ export type RunMetrics = {
 };
 
 const DEFAULT_SAMPLING = { temperature: 0.7, topP: 1.0, maxTokens: 2048 };
-const DEFAULT_INSTRUCTIONS = `Keep your response under {maxTokens} tokens. Do not exceed this limit.`;
+const DEFAULT_INSTRUCTIONS = `Keep your response under {maxTokens} tokens. Do not exceed this limit. Ensure the response is complete and not cut off.`;
 
 function buildRequest(values: ComparisonRunValues, side: 'A' | 'B'): CompletionRequestBody {
   // take form values and build into a request body for the API

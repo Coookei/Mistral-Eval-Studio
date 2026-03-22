@@ -18,6 +18,8 @@ import { evaluationSchema, type EvaluationValues } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertTriangle, Gauge, Loader2, Zap } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { RunMetrics } from './NewComparisonPageComponent';
 
 type Props = {
@@ -193,7 +195,9 @@ function OutputPanel({
         ) : error ? (
           <p className="text-destructive">{error}</p>
         ) : hasRun ? (
-          output
+          <div className="prose prose-sm dark:prose-invert max-w-none">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{output}</ReactMarkdown>
+          </div>
         ) : (
           <p className="text-muted-foreground">Run a comparison to see this output.</p>
         )}
