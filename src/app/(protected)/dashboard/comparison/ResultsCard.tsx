@@ -16,7 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { evaluationSchema, type EvaluationValues } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Gauge, Loader2, Zap } from 'lucide-react';
+import { AlertTriangle, Gauge, Loader2, Zap } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { RunMetrics } from './NewComparisonPageComponent';
 
@@ -196,6 +196,12 @@ function OutputPanel({
           <p className="text-muted-foreground">Run a comparison to see this output.</p>
         )}
       </div>
+      {hasRun && !error && !isRunning && metrics.finishReason === 'length' && (
+        <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-500">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span>Response may be incomplete - the token limit was reached.</span>
+        </div>
+      )}
       {hasRun && !error && !isRunning && (
         <div className="space-y-2 border-t border-border pt-3">
           <Badge variant="secondary" className="inline-block">
