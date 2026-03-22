@@ -22,9 +22,11 @@ import { RunMetrics } from './NewComparisonPageComponent';
 
 type Props = {
   isRunning: boolean;
-  hasResults: boolean;
+  hasRun: boolean;
   outputA: string;
   outputB: string;
+  errorA: string | null;
+  errorB: string | null;
   metricsA: RunMetrics;
   metricsB: RunMetrics;
   onSaveComplete: () => void;
@@ -32,9 +34,11 @@ type Props = {
 
 export function ResultsCard({
   isRunning,
-  hasResults,
+  hasRun,
   outputA,
   outputB,
+  errorA,
+  errorB,
   metricsA,
   metricsB,
   onSaveComplete,
@@ -66,20 +70,22 @@ export function ResultsCard({
           <OutputPanel
             label="A"
             output={outputA}
+            error={errorA}
             metrics={metricsA}
             isRunning={isRunning}
-            hasResults={hasResults}
+            hasRun={hasRun}
           />
           <OutputPanel
             label="B"
             output={outputB}
+            error={errorB}
             metrics={metricsB}
             isRunning={isRunning}
-            hasResults={hasResults}
+            hasRun={hasRun}
           />
         </div>
 
-        {hasResults && (
+        {hasRun && !errorA && !errorB && (
           <>
             <Separator />
             <Form {...form}>
@@ -161,15 +167,17 @@ export function ResultsCard({
 function OutputPanel({
   label,
   output,
+  error,
   metrics,
   isRunning,
-  hasResults,
+  hasRun,
 }: {
   label: 'A' | 'B';
   output: string;
+  error: string | null;
   metrics: RunMetrics;
   isRunning: boolean;
-  hasResults: boolean;
+  hasRun: boolean;
 }) {
   return (
     <div className="flex flex-col h-full space-y-4">
@@ -180,13 +188,15 @@ function OutputPanel({
       <div className="flex-1 p-4 rounded-md bg-muted text-sm leading-relaxed overflow-y-auto min-h-32">
         {isRunning ? (
           <p className="text-muted-foreground">Generating...</p>
-        ) : hasResults ? (
+        ) : error ? (
+          <p className="text-destructive">{error}</p>
+        ) : hasRun ? (
           output
         ) : (
           <p className="text-muted-foreground">Run a comparison to see this output.</p>
         )}
       </div>
-      {hasResults && !isRunning && (
+      {hasRun && !error && !isRunning && (
         <div className="space-y-2 border-t border-border pt-3">
           <Badge variant="secondary" className="inline-block">
             Success
