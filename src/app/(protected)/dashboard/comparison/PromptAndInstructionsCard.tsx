@@ -111,6 +111,12 @@ export function PromptAndInstructionsCard({ control }: Props) {
             />
           </div>
 
+          <p className="text-sm text-muted-foreground">
+            {
+              'It is recommended to include your token limit in the instructions to ensure the model does not get cut off mid response.'
+            }
+          </p>
+
           {useShared ? (
             <FormField
               control={control}
@@ -170,6 +176,11 @@ export function PromptAndInstructionsCard({ control }: Props) {
               />
             </div>
           )}
+          <p className="text-xs text-muted-foreground">
+            {
+              '{maxTokens} will be replaced with the max tokens value set in the configuration section below.'
+            }
+          </p>
         </div>
       </CardContent>
     </Card>

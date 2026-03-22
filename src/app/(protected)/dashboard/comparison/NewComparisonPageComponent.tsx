@@ -16,9 +16,15 @@ import { ConfigurationCard } from './ConfigurationCard';
 import { PromptAndInstructionsCard } from './PromptAndInstructionsCard';
 import { ResultsCard } from './ResultsCard';
 
-export type RunMetrics = { latency: number; inputTokens: number; outputTokens: number };
+export type RunMetrics = {
+  latency: number;
+  inputTokens: number;
+  outputTokens: number;
+  finishReason: string;
+};
 
 const DEFAULT_SAMPLING = { temperature: 0.7, topP: 1.0, maxTokens: 2048 };
+const DEFAULT_INSTRUCTIONS = `Keep your response under {maxTokens} tokens. Do not exceed this limit.`;
 
 function buildRequest(values: ComparisonRunValues, side: 'A' | 'B'): CompletionRequestBody {
   // take form values and build into a request body for the API
@@ -50,9 +56,9 @@ export default function NewComparisonPageComponent() {
     defaultValues: {
       prompt: '',
       useSharedInstructions: true,
-      sharedInstructions: '',
-      instructionsA: '',
-      instructionsB: '',
+      sharedInstructions: DEFAULT_INSTRUCTIONS,
+      instructionsA: DEFAULT_INSTRUCTIONS,
+      instructionsB: DEFAULT_INSTRUCTIONS,
       linkSampling: true,
       modelA: 'mistral-large-latest',
       modelB: 'mistral-medium-latest',
@@ -73,11 +79,13 @@ export default function NewComparisonPageComponent() {
     latency: 0,
     inputTokens: 0,
     outputTokens: 0,
+    finishReason: '',
   });
   const [metricsB, setMetricsB] = useState<RunMetrics>({
     latency: 0,
     inputTokens: 0,
     outputTokens: 0,
+    finishReason: '',
   });
 
   // isRunning is true for the duration of handleRunComparison
@@ -98,6 +106,7 @@ export default function NewComparisonPageComponent() {
         latency: settledA.value.latencyMs,
         inputTokens: settledA.value.usage.promptTokens,
         outputTokens: settledA.value.usage.completionTokens,
+        finishReason: settledA.value.finishReason,
       });
     } else {
       setErrorA(
@@ -111,6 +120,7 @@ export default function NewComparisonPageComponent() {
         latency: settledB.value.latencyMs,
         inputTokens: settledB.value.usage.promptTokens,
         outputTokens: settledB.value.usage.completionTokens,
+        finishReason: settledB.value.finishReason,
       });
     } else {
       setErrorB(
