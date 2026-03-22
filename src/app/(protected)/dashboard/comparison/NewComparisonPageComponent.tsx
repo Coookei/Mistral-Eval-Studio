@@ -1,8 +1,11 @@
 'use client';
 
+import type { CompletionRequestBody } from '@/app/api/llm/complete/schema';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { api } from '@/lib/api';
+import type { CompletionResult } from '@/lib/llm/types';
 import { comparisonRunSchema, type ComparisonRunValues } from '@/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Loader2 } from 'lucide-react';
@@ -16,6 +19,28 @@ import { ResultsCard } from './ResultsCard';
 export type RunMetrics = { latency: number; inputTokens: number; outputTokens: number };
 
 const DEFAULT_SAMPLING = { temperature: 0.7, topP: 1.0, maxTokens: 2048 };
+
+function buildRequest(values: ComparisonRunValues, side: 'A' | 'B'): CompletionRequestBody {
+  // take form values and build into a request body for the API
+  const model = side === 'A' ? values.modelA : values.modelB;
+  const systemPrompt = values.useSharedInstructions
+    ? values.sharedInstructions
+    : side === 'A'
+      ? values.instructionsA
+      : values.instructionsB;
+  const config = values.linkSampling
+    ? values.sharedConfig
+    : side === 'A'
+      ? values.configA
+      : values.configB;
+
+  return {
+    model,
+    prompt: values.prompt,
+    ...(systemPrompt && { systemPrompt }), // only include if not empty
+    ...config, // spread temp, topP, maxTokens at root of request
+  };
+}
 
 export default function NewComparisonPageComponent() {
   const router = useRouter();
@@ -38,7 +63,10 @@ export default function NewComparisonPageComponent() {
     mode: 'onChange',
   });
 
-  const [hasResults, setHasResults] = useState(false);
+  const [hasRun, setHasRun] = useState(false);
+  const [errorA, setErrorA] = useState<string | null>(null);
+  const [errorB, setErrorB] = useState<string | null>(null);
+
   const [outputA, setOutputA] = useState('');
   const [outputB, setOutputB] = useState('');
   const [metricsA, setMetricsA] = useState<RunMetrics>({
@@ -52,27 +80,52 @@ export default function NewComparisonPageComponent() {
     outputTokens: 0,
   });
 
+  // isRunning is true for the duration of handleRunComparison
   const isRunning = form.formState.isSubmitting;
 
   const handleRunComparison = async (values: ComparisonRunValues) => {
-    console.log('Run comparison with:', values);
+    setErrorA(null);
+    setErrorB(null);
 
-    // TODO call backend with values to run the comparison
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+    const [settledA, settledB] = await Promise.allSettled([
+      api.post<CompletionResult>('/api/llm/complete', buildRequest(values, 'A')),
+      api.post<CompletionResult>('/api/llm/complete', buildRequest(values, 'B')),
+    ]);
 
-    // TODO replace with real outputs and metrics from the backend below
-    setOutputA('llm output a');
-    setOutputB('llm outpput b');
-    // todo replace with real metrics from the backend below
-    setMetricsA({ latency: 342, inputTokens: 45, outputTokens: 128 });
-    setMetricsB({ latency: 298, inputTokens: 45, outputTokens: 95 });
+    if (settledA.status === 'fulfilled') {
+      setOutputA(settledA.value.text);
+      setMetricsA({
+        latency: settledA.value.latencyMs,
+        inputTokens: settledA.value.usage.promptTokens,
+        outputTokens: settledA.value.usage.completionTokens,
+      });
+    } else {
+      setErrorA(
+        settledA.reason instanceof Error ? settledA.reason.message : 'An unexpected error occurred.'
+      );
+    }
 
-    setHasResults(true);
+    if (settledB.status === 'fulfilled') {
+      setOutputB(settledB.value.text);
+      setMetricsB({
+        latency: settledB.value.latencyMs,
+        inputTokens: settledB.value.usage.promptTokens,
+        outputTokens: settledB.value.usage.completionTokens,
+      });
+    } else {
+      setErrorB(
+        settledB.reason instanceof Error ? settledB.reason.message : 'An unexpected error occurred.'
+      );
+    }
+
+    setHasRun(true);
   };
 
   const handleReset = () => {
     form.reset();
-    setHasResults(false);
+    setHasRun(false);
+    setErrorA(null);
+    setErrorB(null);
     setOutputA('');
     setOutputB('');
   };
@@ -127,7 +180,7 @@ export default function NewComparisonPageComponent() {
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Running...
                   </>
-                ) : hasResults ? (
+                ) : hasRun ? (
                   'Rerun comparison'
                 ) : (
                   'Run comparison'
@@ -139,9 +192,11 @@ export default function NewComparisonPageComponent() {
           {/* <ResultsCard> is outside the <form> to avoid html error of nested forms */}
           <ResultsCard
             isRunning={isRunning}
-            hasResults={hasResults}
+            hasRun={hasRun}
             outputA={outputA}
             outputB={outputB}
+            errorA={errorA}
+            errorB={errorB}
             metricsA={metricsA}
             metricsB={metricsB}
             onSaveComplete={handlePostSaveEvaluation}
