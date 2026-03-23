@@ -33,7 +33,8 @@ export function ConfigurationCard({ control }: Props) {
             control={control}
             name="linkSampling"
             render={({ field }) => (
-              <FormItem className="flex items-center gap-2 space-y-0">
+              // FORM ITEM MUST HAVE relative or causes annoying whitespace bugs
+              <FormItem className="relative flex items-center gap-2 space-y-0">
                 <Label htmlFor="link-settings" className="text-sm cursor-pointer">
                   Link sampling settings
                 </Label>
@@ -55,7 +56,7 @@ export function ConfigurationCard({ control }: Props) {
             control={control}
             name="modelA"
             render={({ field }) => (
-              <FormItem className="space-y-2">
+              <FormItem className="relative space-y-2">
                 <div className="flex items-center">
                   <FormLabel>Config A - Model</FormLabel>
                   <InfoTooltip text="The Mistral model variant to use for Config A." />
@@ -83,7 +84,7 @@ export function ConfigurationCard({ control }: Props) {
             control={control}
             name="modelB"
             render={({ field }) => (
-              <FormItem className="space-y-2">
+              <FormItem className="relative space-y-2">
                 <div className="flex items-center">
                   <FormLabel>Config B - Model</FormLabel>
                   <InfoTooltip text="The Mistral model variant to use for Config B." />
