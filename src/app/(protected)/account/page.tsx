@@ -9,11 +9,7 @@ export const metadata: Metadata = {
 const AccountPage = async () => {
   const { user } = await requireUser();
 
-  return (
-    <section>
-      <AccountPageComponent user={user} />
-    </section>
-  );
+  return <AccountPageComponent user={user} />;
 };
 
 export default AccountPage;
