@@ -192,7 +192,7 @@ export default function NewComparisonPageComponent() {
             <ConfigurationCard control={form.control} />
 
             <div className="flex items-center justify-end gap-3">
-              {elapsedMs && (
+              {elapsedMs !== null && (
                 <span className="flex items-center gap-1.5 text-sm text-muted-foreground tabular-nums">
                   <Timer className="h-3.5 w-3.5" />
                   {isRunning
