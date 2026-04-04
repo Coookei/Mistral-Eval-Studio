@@ -67,13 +67,13 @@ export const mistral = {
       const chunk = event.data;
       rawId = chunk.id;
 
-      const delta = chunk.choices[0]?.delta.content;
+      const delta = chunk.choices?.[0]?.delta.content;
       if (typeof delta === 'string' && delta) {
         text += delta;
         onChunk(delta); // this method is passed from the API streamingService, each delta is written as an JSON line to the HTTP stream to be read by browser
       }
 
-      const chunkFinishReason = chunk.choices[0]?.finishReason;
+      const chunkFinishReason = chunk.choices?.[0]?.finishReason;
       if (chunkFinishReason) finishReason = chunkFinishReason;
 
       if (chunk.usage) {
